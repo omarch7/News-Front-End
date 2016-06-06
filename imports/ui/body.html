@@ -1,0 +1,23 @@
+<body>
+    <div class="container">
+        <header>
+            <h1>News</h1>
+            <form class="query">
+                <input id="search" type="text" name="text" placeholder="What are you looking for?">
+            </form>
+        </header>
+        <ul>
+            {{#each documents}}
+                {{> document}}
+            {{/each}}
+        </ul>
+    </div>
+</body>
+
+<template name="document">
+    <li>
+        {{title}} <strong>{{source}}</strong>
+        <br/>
+        {{url}}
+    </li>
+</template>
