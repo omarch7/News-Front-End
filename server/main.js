@@ -16,7 +16,6 @@ Meteor.publish('query', function queryPublication(data) {
         return [];
     }
     var tokens = data.tokenizeAndStem().sort();
-    console.log(tokens);
     var terms = Dictionary.find({term: {$in: tokens}}, {fields: {_id:1, term:1, freq:1, docs: 1}}).fetch();
     var totalDocsTerms = 0;
     terms.forEach(function(term){
@@ -72,8 +71,9 @@ Meteor.publish('query', function queryPublication(data) {
                 scores.push({document_id: MongoInternals.ObjectID(document_id), score: documentsDict[document_id].score});
             }
         }
-        // Queries.insert({query:tokens.join("-"), docs: totalDocsTerms, results:scores});
         Queries.upsert({query:tokens.join("-")},{$set:{docs:totalDocsTerms, results:scores}});
+
+
         return Queries.find({query:tokens.join("-")});
     }else{
         return Queries.find({query:tokens.join("-")});

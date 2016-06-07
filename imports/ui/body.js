@@ -15,6 +15,10 @@ Template.body.helpers({
         var query = Queries.find({}).fetch()[0];
         var scores = {};
         if(query){
+            query.results = query.results.sort(function (a, b) {
+                return b.score - a.score;
+            }).slice(0,40);
+            console.log(query);
             Session.set('documents', query.results.map(function (result) {
                 return result.document_id;
             }));
@@ -35,6 +39,15 @@ Template.body.helpers({
     }
 });
 
+Template.article.helpers({
+    cardImage: function () {
+        return this.images[0];
+    },
+    hasImages: function () {
+      return this.images.length > 0 ? true : false;
+    }
+});
+
 Template.body.events({
     'keyup #search': _.debounce(function(e) {
         Session.set('documents', []);
@@ -48,4 +61,5 @@ Template.body.events({
 Meteor.autorun(function () {
     Meteor.subscribe('documents', Session.get('documents'));
     Meteor.subscribe('query', Session.get('query'));
+    document.title = "News Search Engine, by Omar Contreras"
 });

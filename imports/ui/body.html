@@ -1,23 +1,64 @@
 <body>
     <div class="container">
         <header>
-            <h1>News</h1>
+            <h2 class="header deep-purple-text">News Search</h2>
             <form class="query">
-                <input id="search" type="text" name="text" placeholder="What are you looking for?">
+                <div class="row">
+                    <div class="input-field">
+                        <i class="mdi-action-search prefix deep-purple-text"></i>
+                        <input id="search" type="text" name="text" placeholder="What are you looking for?">
+                    </div>
+                </div>
             </form>
         </header>
-        <ul>
+        {{avatar}}
+        <div class="row">
             {{#each documents}}
-                {{> document}}
+                {{> article}}
             {{/each}}
-        </ul>
+        </div>
     </div>
 </body>
 
-<template name="document">
-    <li>
-        <strong>{{score}}</strong> {{title}} <strong>{{source}}</strong>
-        <br/>
-        {{url}}
-    </li>
+
+<template name="article">
+    <div class="col s12 m6 l4">
+        <div class="card hoverable">
+            {{#if hasImages}}
+                <div class="card-image waves-effect waves-block waves-light">
+                    <img src="{{cardImage.src}}" alt="{{cardImage.alt}}"/>
+                    <span class="card-title">{{title}}</span>
+                </div>
+            {{else}}
+                <div class="card-image deep-purple">
+                    <span class="card-title">{{title}}</span>
+                </div>
+            {{/if}}
+            <div class="card-content">
+                <span class="card-title activator grey-text text-darken-4 flow-text truncate">{{#if section}}{{section}}{{else}}Feature{{/if}}<i class="mdi-navigation-more-vert right"></i></span>
+                <p class="truncate">{{excerpt}}</p>
+            </div>
+            <div class="card-reveal">
+                <span class="card-title grey-text text-darken-4">{{source}}<i class="mdi-navigation-close right"></i></span>
+                <h5 class="subheader">{{title}}</h5>
+                <blockquote>{{date}}</blockquote>
+                <p>{{excerpt}}</p>
+                <ul class="collection">
+                    {{#each related}}
+                        <li class="collection-item"><a href="{{url}}" target="new">{{text}}</a></li>
+                    {{/each}}
+                </ul>
+                <div class="chip center">
+                    BM25 Score: {{score}}
+                </div>
+                <blockquote>
+                    Crawled at<br/>
+                    {{crawled_at}}
+                </blockquote>
+            </div>
+            <div class="card-action">
+                <a href="{{url}}" target="new">Read the article</a>
+            </div>
+        </div>
+    </div>
 </template>
